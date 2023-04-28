@@ -1,8 +1,71 @@
 version: "3"
 services:
+
+  mariadb:
+    container_name: mariadb
+    env_file: .env
+    networks:
+      - frontend-tier
+      - backend-tier
+    build:
+      context: srcs/requirements/mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: unless-stopped
+    expose:
+      - "3306"
+
   nginx:
-    build: ./srcs/requirements/nginx
+    container_name: nginx
+    env_file: .env
+    networks:
+      - frontend-tier
+      - backend-tier
+    build:
+      context: srcs/requirements/nginx
+    volumes:
+      - wordpress:/var/www/wordpress
+    depends_on:
+      - wordpress
+    restart: on-failure
     ports:
-      - 5000:443
-  php:
-    build: ./srcs/requirements/php
+      - "443:443"
+
+  wordpress:
+    container_name: wordpress
+    env_file: .env
+    networks:
+      - frontend-tier
+      - backend-tier
+    build:
+      context: srcs/requirements/wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
+    depends_on:
+      - mariadb
+    restart: on-failure
+    ports:
+      - "9000"
+
+
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      device: /Desktop/wordpress
+      o: bind
+      type: none
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      device: /Desktop/mariadb
+      o: bind
+      type: none
+
+networks:
+  frontend-tier:
+    name: frontend-tier
+  backend-tier:
+    name: backend-tier
