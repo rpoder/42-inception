@@ -32,33 +32,33 @@ services:
 
 
 
-  # wordpress:
-  #   container_name: wordpress
-  #   env_file: .env
-  #   networks:
-  #     - backend-tier
-  #   build:
-  #     context: srcs/requirements/wordpress
-  #   volumes:
-  #     - wordpress:/var/www/wordpress
-  #   # depends_on:
-  #   #   - mariadb
-  #   restart: on-failure
-  #   ports:
-  #     - "9000"
+  wordpress:
+    container_name: wordpress
+    env_file: .env
+    networks:
+      - backend-tier
+    build:
+      context: srcs/requirements/wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
+    # depends_on:
+    #   - mariadb
+    restart: on-failure
+    ports:
+      - "9000"
 
-  php:
-      container_name: php
-      env_file: .env
-      networks:
-        - backend-tier
-      build:
-        context: srcs/requirements/php
-      volumes:
-        - wordpress:/var/www/wordpress
-      restart: on-failure
-      ports:
-        - "9000"
+  # php:
+  #     container_name: php
+  #     env_file: .env
+  #     networks:
+  #       - backend-tier
+  #     build:
+  #       context: srcs/requirements/php
+  #     volumes:
+  #       - wordpress:/var/www/wordpress
+  #     restart: on-failure
+  #     ports:
+  #       - "9000"
 
 
 volumes:
