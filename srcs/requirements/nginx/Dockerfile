@@ -14,13 +14,15 @@ RUN			mkdir -p /var/run/nginx
 
 COPY		conf/nginx.conf /etc/nginx/nginx.conf
 
-COPY		html/ /var/www/html
+# COPY		files/ /var/www/wordpress
+COPY		files/index.php /var/www/wordpress/index.php
 
-RUN			adduser www-data
+RUN			adduser www-data || true
 RUN			chmod 755 /var/www/html
+RUN			chmod 777 /var/www/wordpress
 RUN			chown -R www-data:www-data /var/www/html
 
 EXPOSE		443
 
-CMD			["nginx","-g", "daemon off;"]
+CMD			nginx -g "daemon off;"
 

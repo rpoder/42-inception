@@ -5,49 +5,60 @@ services:
     container_name: nginx
     env_file: .env
     networks:
-      - frontend-tier
       - backend-tier
     build:
       context: srcs/requirements/nginx
     volumes:
       - wordpress:/var/www/wordpress
-    depends_on:
-      - wordpress
+    # depends_on:
+    #   - wordpress
     restart: on-failure
     ports:
       - "443:443"
 
-  mariadb:
-    container_name: mariadb
-    env_file: .env
-    networks:
-      - frontend-tier
-      - backend-tier
-    build:
-      context: srcs/requirements/mariadb
-    volumes:
-      - mariadb:/var/lib/mysql
-    restart: unless-stopped
-    expose:
-      - "3306"
+  # mariadb:
+  #   container_name: mariadb
+  #   env_file: .env
+  #   networks:
+  #     - frontend-tier
+  #     - backend-tier
+  #   build:
+  #     context: srcs/requirements/mariadb
+  #   volumes:
+  #     - mariadb:/var/lib/mysql
+  #   restart: unless-stopped
+  #   expose:
+  #     - "3306"
 
 
 
-  wordpress:
-    container_name: wordpress
-    env_file: .env
-    networks:
-      - frontend-tier
-      - backend-tier
-    build:
-      context: srcs/requirements/wordpress
-    volumes:
-      - wordpress:/var/www/wordpress
-    depends_on:
-      - mariadb
-    restart: on-failure
-    ports:
-      - "9000"
+  # wordpress:
+  #   container_name: wordpress
+  #   env_file: .env
+  #   networks:
+  #     - backend-tier
+  #   build:
+  #     context: srcs/requirements/wordpress
+  #   volumes:
+  #     - wordpress:/var/www/wordpress
+  #   # depends_on:
+  #   #   - mariadb
+  #   restart: on-failure
+  #   ports:
+  #     - "9000"
+
+  php:
+      container_name: php
+      env_file: .env
+      networks:
+        - backend-tier
+      build:
+        context: srcs/requirements/php
+      volumes:
+        - wordpress:/var/www/wordpress
+      restart: on-failure
+      ports:
+        - "9000"
 
 
 volumes:
@@ -55,19 +66,17 @@ volumes:
     name: wordpress
     driver: local
     driver_opts:
-      device: /home/ronan/Desktop/volumes/wordpress
+      device: /home/rpoder/data/wordpress
       o: bind
       type: none
-  mariadb:
-    name: mariadb
-    driver: local
-    driver_opts:
-      device: /home/ronan/Desktop/volumes/mariadb
-      o: bind
-      type: none
+  # mariadb:
+  #   name: mariadb
+  #   driver: local
+  #   driver_opts:
+  #     device: /home/rpoder/data/mariadb
+  #     o: bind
+  #     type: none
 
 networks:
-  frontend-tier:
-    name: frontend-tier
   backend-tier:
     name: backend-tier
