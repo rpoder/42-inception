@@ -7,13 +7,9 @@ RUN		apt install mariadb-server mariadb-client -y
 
 EXPOSE	3306
 
-# RUN		service mysql start;
-# RUN		service mysql status
 
-# CMD		mysqld_safe
-
-COPY	conf/setup-maria.sh /tmp/setup-maria.sh
 COPY	conf/50-server.cnf	/etc/mysql/mariadb.conf.d/50-server2.cnf
+COPY	conf/setup-maria.sh /tmp/setup-maria.sh
 
 ENV		SQL_DATABASE_NAME	inception_db
 ENV		SQL_USER_NAME		rpoder
@@ -27,4 +23,4 @@ RUN		sh /tmp/setup-maria.sh
 
 # RUN		mysqladmin -u root -p qwerty shutdown
 
-# RUN		exec mysqld_safe
+CMD		exec mysqld

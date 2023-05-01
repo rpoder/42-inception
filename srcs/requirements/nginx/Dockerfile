@@ -16,6 +16,7 @@ COPY		conf/nginx.conf /etc/nginx/nginx.conf
 
 COPY		html/ /var/www/html
 
+RUN			adduser www-data
 RUN			chmod 755 /var/www/html
 RUN			chown -R www-data:www-data /var/www/html
 
