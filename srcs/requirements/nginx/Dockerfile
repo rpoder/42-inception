@@ -18,9 +18,6 @@ COPY		conf/nginx.conf /etc/nginx/nginx.conf
 # COPY		files/index.php /var/www/wordpress/index.php
 
 RUN			adduser www-data || true
-# RUN			mkdir -p /var/www/wordpress
-RUN			chmod 755 /var/www/html
-# RUN			chmod 777 /var/www/wordpress
 RUN			chown -R www-data:www-data /var/www/html
 
 EXPOSE		443

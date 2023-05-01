@@ -38,7 +38,7 @@ RUN			mkdir /run/php
 
 COPY		conf/auto-config.sh /tmp/auto-config.sh
 
-# RUN			sh /tmp/auto-config.sh
+RUN			sh /tmp/auto-config.sh
 
 # EXPOSE		9000
 
