@@ -26,10 +26,10 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
     restart: unless-stopped
-    expose:
-      - "3306"
-
-
+    # expose:
+    #   - "3306"
+    # ports:
+    #   - "3306"
 
   wordpress:
     container_name: wordpress
