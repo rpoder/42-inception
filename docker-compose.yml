@@ -3,6 +3,8 @@ services:
 
   nginx:
     container_name: nginx
+    hostname: nginx
+    image: nginx:rpoder
     env_file: .env
     networks:
       - backend-tier
@@ -18,6 +20,8 @@ services:
 
   mariadb:
     container_name: mariadb
+    hostname: mariadb
+    image: mariadb:rpoder
     env_file: .env
     networks:
       - backend-tier
@@ -26,13 +30,11 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
     restart: unless-stopped
-    # expose:
-    #   - "3306"
-    # ports:
-    #   - "3306"
 
   wordpress:
     container_name: wordpress
+    hostname: wordpress
+    image: wordpress:rpoder
     env_file: .env
     networks:
       - backend-tier
@@ -40,11 +42,9 @@ services:
       context: srcs/requirements/wordpress
     volumes:
       - wordpress:/var/www/wordpress
-    # depends_on:
-    #   - mariadb
+    depends_on:
+      - mariadb
     restart: on-failure
-    ports:
-      - "9000"
 
   # php:
   #     container_name: php
@@ -79,3 +79,4 @@ volumes:
 networks:
   backend-tier:
     name: backend-tier
+    driver: bridge
