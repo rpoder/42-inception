@@ -24,7 +24,6 @@ if [ ! -e "/var/www/wordpress/wp-config.php" ] ; then
 						--admin_user=$WP_ADMIN_USR \
 						--admin_password=$WP_ADMIN_PASSWORD \
 						--admin_email=$WP_ADMIN_EMAIL \
-						--skip-email \
 						--path='/var/www/wordpress'
 
 	wp user create		--allow-root \
