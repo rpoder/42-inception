@@ -4,6 +4,7 @@ services:
   nginx:
     container_name: nginx
     hostname: nginx
+    image: nginx:rpoder
     env_file: .env
     networks:
       - inception_network
@@ -13,7 +14,7 @@ services:
       - wordpress:/var/www/wordpress
     depends_on:
       - wordpress
-    restart: on-failure
+    restart: always
     ports:
       - "443:443"
 
@@ -22,17 +23,23 @@ services:
       context: ./srcs/requirements/mariadb
     container_name: mariadb
     hostname: mariadb
+    image: mariadb:rpoder
     env_file:
       - .env
     networks:
       - inception_network
     volumes:
       - mariadb:/var/lib/mysql
-    restart: unless-stopped
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mysql $SQL_DATABASE_NAME -uroot -p$SQL_ROOT_PASSWORD -e 'SELECT 1' || exit 1"]
+      interval: 0.5s
+      retries: 100
 
   wordpress:
     container_name: wordpress
     hostname: wordpress
+    image: wordpress:rpoder
     env_file: .env
     networks:
       - inception_network
@@ -41,22 +48,9 @@ services:
     volumes:
       - wordpress:/var/www/wordpress
     depends_on:
-      - mariadb
-    restart: on-failure
-
-  # php:
-  #     container_name: php
-  #     env_file: .env
-  #     networks:
-  #       - inception_network
-  #     build:
-  #       context: srcs/requirements/php
-  #     volumes:
-  #       - wordpress:/var/www/wordpress
-  #     restart: on-failure
-  #     ports:
-  #       - "9000"
-
+      mariadb:
+          condition: service_healthy
+    restart: always
 
 volumes:
   wordpress:

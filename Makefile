@@ -6,32 +6,31 @@
 #    By: rpoder <rpoder@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 13:19:33 by rpoder            #+#    #+#              #
-#    Updated: 2023/05/04 16:01:22 by rpoder           ###   ########.fr        #
+#    Updated: 2023/05/04 17:10:19 by rpoder           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
-all:
-	docker compose up --build
+all: volumes
+	docker compose -f ./srcs/docker-compose.yml up -d --build
 
 log:
-	docker compose logs
+	docker compose -f ./srcs/docker-compose.yml logs
 
 up: all
 
 down:
-	docker compose down
+	docker compose -f ./srcs/docker-compose.yml down
 
 in-nginx:
-	docker compose exec -it nginx bash
+	docker compose -f ./srcs/docker-compose.yml exec -it nginx bash
 
 in-mariadb:
-	docker compose exec -it mariadb bash
+	docker compose -f ./srcs/docker-compose.yml exec -it mariadb bash
 
 in-wordpress:
-	docker compose exec -it wordpress bash
+	docker compose -f ./srcs/docker-compose.yml exec -it wordpress bash
 
-clean:
+clean: down
 	sudo rm -rf /home/rpoder/data/wordpress/*
 	sudo rm -rf /home/rpoder/data/wordpress/*.*
 	sudo rm -rf /home/rpoder/data/mariadb/*
@@ -47,7 +46,13 @@ fclean: clean
 	yes | docker image prune
 	yes | docker network prune
 	yes | docker volume prune
+	sudo rm -rf /home/rpoder/data/wordpress
+	sudo rm -rf /home/rpoder/data/mariadb
 
 re:	fclean
 	make all
+
+volumes:
+	mkdir -p  /home/rpoder/data/wordpress
+	mkdir -p  /home/rpoder/data/mariadb
 
