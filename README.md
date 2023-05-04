@@ -4,11 +4,6 @@ This project aims to broaden your knowledge of system administration by using Do
 You will virtualize several Docker images, creating them in your new personal virtual
 machine.
 
-TO DO BEFORE PUSH
-- read le sujet
-- delete .git pour supp .env
-
-
 
 ## Run Locally
 
