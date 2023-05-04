@@ -4,10 +4,9 @@ services:
   nginx:
     container_name: nginx
     hostname: nginx
-    image: nginx:rpoder
     env_file: .env
     networks:
-      - backend-tier
+      - inception_network
     build:
       context: srcs/requirements/nginx
     volumes:
@@ -19,14 +18,14 @@ services:
       - "443:443"
 
   mariadb:
+    build:
+      context: ./srcs/requirements/mariadb
     container_name: mariadb
     hostname: mariadb
-    image: mariadb:rpoder
-    env_file: .env
+    env_file:
+      - .env
     networks:
-      - backend-tier
-    build:
-      context: srcs/requirements/mariadb
+      - inception_network
     volumes:
       - mariadb:/var/lib/mysql
     restart: unless-stopped
@@ -34,10 +33,9 @@ services:
   wordpress:
     container_name: wordpress
     hostname: wordpress
-    image: wordpress:rpoder
     env_file: .env
     networks:
-      - backend-tier
+      - inception_network
     build:
       context: srcs/requirements/wordpress
     volumes:
@@ -50,7 +48,7 @@ services:
   #     container_name: php
   #     env_file: .env
   #     networks:
-  #       - backend-tier
+  #       - inception_network
   #     build:
   #       context: srcs/requirements/php
   #     volumes:
@@ -77,6 +75,6 @@ volumes:
       type: none
 
 networks:
-  backend-tier:
-    name: backend-tier
+  inception_network:
+    name: inception_network
     driver: bridge

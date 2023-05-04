@@ -1,8 +1,6 @@
 sleep	10
 
-if [ ! -e "/var/www/wordpress/.already-exists" ] ; then
-
-touch "/var/www/wordpress/.already-exists"
+if [ ! -e "/var/www/wordpress/wp-config.php" ] ; then
 
 wp	core download	--allow-root \
 					--path='/var/www/wordpress' \

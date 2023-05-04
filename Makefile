@@ -6,21 +6,10 @@
 #    By: rpoder <rpoder@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 13:19:33 by rpoder            #+#    #+#              #
-#    Updated: 2023/05/03 13:53:15 by rpoder           ###   ########.fr        #
+#    Updated: 2023/05/04 16:01:22 by rpoder           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: rpoder <rpoder@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/09/20 21:14:29 by ronanpoder        #+#    #+#              #
-#    Updated: 2023/04/06 18:01:38 by rpoder           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 all:
 	docker compose up --build
@@ -44,11 +33,14 @@ in-wordpress:
 
 clean:
 	sudo rm -rf /home/rpoder/data/wordpress/*
+	sudo rm -rf /home/rpoder/data/wordpress/*.*
 	sudo rm -rf /home/rpoder/data/mariadb/*
-	docker kill $(docker ps -q) > /dev/null 2>&1 || true
-	docker image rm $(docker image ls -a -q) > /dev/null 2>&1  || true
-	docker network rm $(docker network ls -q) > /dev/null 2>&1  || true
-	docker volume rm $(docker volume ls -q) > /dev/null 2>&1  || true
+	sudo rm -rf /home/rpoder/data/mariadb/*.*
+	docker kill $(docker ps -q) || true
+	docker image rm $(docker image ls -aq)  || true
+	docker network rm $(docker network ls -q)  || true
+	docker volume rm $(docker volume ls -q)  || true
+	docker system prune -a -f || true
 
 fclean: clean
 	yes | docker system prune
